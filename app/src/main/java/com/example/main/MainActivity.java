@@ -69,9 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         Toast.makeText(MainActivity.this, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
 
-                        // 새로고침 또는 로그인 화면으로 이동 원하면 여기에 추가
-                        // startActivity(new Intent(MapsActivity.this, Login.class));
-                        finish();
+                        recreate();
+
 
                     } else {
                         // 로그인 화면으로 이동

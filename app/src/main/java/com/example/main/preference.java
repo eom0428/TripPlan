@@ -44,37 +44,40 @@ public class preference extends AppCompatActivity implements View.OnClickListene
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_preference);
 
-        //firebaseAuth 인스턴스 초기화
+        // 로그인 여부 확인
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            // 로그인 안 되어 있으면 로그인 화면으로 이동
+            Intent intent = new Intent(preference.this, Login.class);
+            startActivity(intent);
+            finish(); // 이 화면을 종료해서 뒤로가기 눌러도 안 돌아오게
+            return;
+        }
 
-        btnOk = (Button) findViewById(R.id.btnOk);
+        btnOk = findViewById(R.id.btnOk);
         btnOk.setOnClickListener(this);
-        btnBack = (Button) findViewById(R.id.btnHome);
+        btnBack = findViewById(R.id.btnHome);
         btnBack.setOnClickListener(this);
-        editPre1 = (EditText)findViewById(R.id.editPre1);
-        editPre2 = (EditText)findViewById(R.id.editPre2);
+        editPre1 = findViewById(R.id.editPre1);
+        editPre2 = findViewById(R.id.editPre2);
 
         db = FirebaseFirestore.getInstance();
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 pre1 = editPre1.getText().toString().trim();
                 pre2 = editPre2.getText().toString().trim();
-
-                if (pre1.isEmpty() ||pre2.isEmpty()) {
-                    return;
-                }
+                // 아무 작업 안 해도 됨
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {}
         };
 
-        // 값이 바뀌었을때 업데이트
         editPre1.addTextChangedListener(textWatcher);
         editPre2.addTextChangedListener(textWatcher);
 

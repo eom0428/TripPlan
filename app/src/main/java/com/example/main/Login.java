@@ -75,16 +75,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                getDb();
                                 Log.d(TAG, "signInWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = prefs.edit();
-                                editor.putBoolean("isLoggedIn", true); // 로그인 상태 저장
-                                editor.putString("userId", userId);    // 사용자 정보도 저장 가능
-                                editor.apply(); // 저장
-
-                                updateUI(user);
+                                getDb();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -101,17 +93,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     }
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
-            Toast.makeText(this, "로그인 성공! 사용자: " + email, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "로그인 성공! 사용자: " + userId, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "로그인 실패...", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void getDb(){
+    public void getDb() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DocumentReference docRef = db.collection("user").document(uid);
+        DocumentReference docRef = db.collection("users").document(uid);
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -119,19 +113,30 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG1, "DocumentSnapshot data: " + document.getData());
-                        if (document.exists()) {
-                            userId = document.getString("userId");
-                            Log.d(TAG1, "유저ID: " + userId);
-                        }
 
+                        userId = document.getString("userId");
+                        Log.d(TAG1, "유저ID: " + userId);
+
+                        // 로그인 상태 저장
+                        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("isLoggedIn", true);
+                        editor.putString("userId", userId);
+                        editor.apply();
+
+                        updateUI(FirebaseAuth.getInstance().getCurrentUser());
                     } else {
                         Log.d(TAG1, "No such document");
+                        Toast.makeText(Login.this, "회원 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        updateUI(null);
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+                    Toast.makeText(Login.this, "회원 정보 조회 실패", Toast.LENGTH_SHORT).show();
+                    updateUI(null);
                 }
             }
-
         });
     }
+
 }

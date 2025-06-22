@@ -1,6 +1,7 @@
 package com.example.main;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -92,6 +93,10 @@ public class Plan extends AppCompatActivity implements View.OnClickListener{
         number = intent.getStringExtra("people_count");
 
         fetchGPTResponse(locationName, period, number); // 이 줄은 retrofit 초기화 후에 호출
+
+        main.setEnabled(false);
+        main.setBackgroundColor(Color.GRAY);
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -199,6 +204,8 @@ public class Plan extends AppCompatActivity implements View.OnClickListener{
             Log.d("일정", log);
             Toast.makeText(Plan.this, "일정 불러오기 성공", Toast.LENGTH_SHORT).show();
         }
+        main.setEnabled(true);
+        main.setBackgroundColor(Color.parseColor("#7C6DEA"));
     }
 
 
