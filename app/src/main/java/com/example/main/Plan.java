@@ -52,7 +52,7 @@ public class Plan extends AppCompatActivity implements View.OnClickListener{
     private  String parsedGpt;
     private String locationName;
     private List<ScheduleItem> scheduleItems;
-    private static final String OPENAI_API_KEY = ""; // 보안처리 필요
+    private static final String OPENAI_API_KEY = BuildConfig.OPENAI_API_KEY;
     private Retrofit retrofit;
     private Button main;
     private Button save;
@@ -73,7 +73,6 @@ public class Plan extends AppCompatActivity implements View.OnClickListener{
 
         db = FirebaseFirestore.getInstance();
 
-        // 먼저 retrofit 초기화
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(120, TimeUnit.SECONDS)
@@ -86,13 +85,12 @@ public class Plan extends AppCompatActivity implements View.OnClickListener{
                 .client(okHttpClient)
                 .build();
 
-        // 그 다음 fetch 호출
         Intent intent = getIntent();
         locationName = intent.getStringExtra("location_name");
         period = intent.getStringExtra("period");
         number = intent.getStringExtra("people_count");
 
-        fetchGPTResponse(locationName, period, number); // 이 줄은 retrofit 초기화 후에 호출
+        fetchGPTResponse(locationName, period, number); // retrofit 초기화 후에 호출
 
         main.setEnabled(false);
         main.setBackgroundColor(Color.GRAY);
@@ -130,6 +128,8 @@ public class Plan extends AppCompatActivity implements View.OnClickListener{
         ChatRequest request = new ChatRequest("gpt-4-turbo", messages,3000);
 
         Call<ChatResponse> call = service.getChatCompletion(request, "Bearer " + OPENAI_API_KEY);
+
+        // call 비동기 실행
         call.enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {

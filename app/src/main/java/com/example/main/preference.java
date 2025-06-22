@@ -50,7 +50,7 @@ public class preference extends AppCompatActivity implements View.OnClickListene
             // 로그인 안 되어 있으면 로그인 화면으로 이동
             Intent intent = new Intent(preference.this, Login.class);
             startActivity(intent);
-            finish(); // 이 화면을 종료해서 뒤로가기 눌러도 안 돌아오게
+            finish();
             return;
         }
 
@@ -71,7 +71,6 @@ public class preference extends AppCompatActivity implements View.OnClickListene
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 pre1 = editPre1.getText().toString().trim();
                 pre2 = editPre2.getText().toString().trim();
-                // 아무 작업 안 해도 됨
             }
 
             @Override
