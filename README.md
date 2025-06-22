@@ -7,5 +7,5 @@
 
 ![앱 메인 화면](images/KakaoTalk_20250622_221136029_01.jpg)
 ![여행 계획 화면](images/KakaoTalk_20250622_221136029_03.jpg)
-![여행 계획 생성 화면](images/KakaoTalk_20250622_221136029_0４.jpg)
-![여행지 추천 화면](images/KakaoTalk_20250622_221136029_0６.jpg)
+![여행 계획 생성 화면](images/KakaoTalk_20250622_221136029_04.jpg)
+![여행지 추천 화면](images/KakaoTalk_20250622_221136029_06.jpg)
